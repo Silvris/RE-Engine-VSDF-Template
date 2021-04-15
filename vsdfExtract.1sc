@@ -1,0 +1,52 @@
+//------------------------------------------------
+//--- 010 Editor v11.0.1 Script File
+//
+//      File: RE Engine shader files
+//   Authors: Silvris
+//   Version: 
+//   Purpose: Extract bytecode from RE Engine shader files
+//  Category: 
+//   History: 
+//------------------------------------------------
+local int i;
+local int j;
+local int sdfFile = GetFileNum();
+local int shdrSize = 0;
+local string basePath = "I:\\MHRise\\shaderTest\\EM_Simple_02\\";
+local string fileName = FileNameGetBase(FileNameGetBase(GetFileName(),false),false);
+local string group = "";
+local string extension = ".shdr";
+local string finalName = "";
+
+local byte OutputPaths = 0;
+
+string makeFileName(string bPath, string fName, string Group, int j, string ext){
+    string s;
+    SPrintf(s, "%s%s_%s_%i%s",bPath,fName,Group,j,ext);
+    if(OutputPaths){
+        Printf("%s\n",s);
+    };
+    return s;
+}
+
+void ExtractShaderFromFile(){
+    RunTemplate("vsdf.bt");
+    for(i = 0; i < header.version*header.shdrCount; i++){
+        for(j = 0; j < 7; j++){//set value but multiple steps per run
+            shdrSize = header.shaderData[i].bytecodeSizes[j];
+            if(shdrSize){
+                SetSelection(header.shaderData[i].bytecodeOffsets[j],shdrSize);
+                CopyToClipboard();
+                group = header.shaderData[i].groupName;
+                FileNew("Hex",true);
+                PasteFromClipboard();
+                finalName = makeFileName(basePath,fileName,group,j,extension);
+                FileSave(finalName);
+                FileClose();
+                FileSelect(sdfFile);
+            };
+        };
+    };
+}
+
+ExtractShaderFromFile();

@@ -1,0 +1,97 @@
+//------------------------------------------------
+//--- 010 Editor v10.0.2 Binary Template
+//
+//      File: RE Engine Shader files 
+//   Authors: Silvris
+//   Version: 
+//   Purpose: 
+//  Category: 
+// File Mask: (.sdf,.vsdf,.mmtr)
+//  ID Bytes: SDF/x00
+//   History: 
+//------------------------------------------------
+local byte IsDMC5 = 1;
+typedef struct{
+    byte unknArray[48];
+}unknByteArray;
+
+typedef struct{
+    uint64 offset;
+    FSeek(offset);
+    string unknName;
+}RString;
+
+string readRString(RString &r){
+    return r.unknName;
+}
+
+typedef struct{
+    uint64 stringOff;
+    local int returnAdd = FTell();
+    FSeek(stringOff);
+    string groupName;
+    FSeek(returnAdd);
+    uint64 bytecodeOffsets[7];
+    uint64 unkn8;
+    uint64 unkn9;
+    uint64 unkn10;
+    uint64 unkn11;
+    uint64 unkn12;
+    uint64 unkn13;
+    uint64 unkn14;
+    if(unkn14){
+        returnAdd = FTell();
+        FSeek(unkn14);
+        RString unknName1<read=readRString>;
+        FSeek(returnAdd);
+    };
+    uint64 unkn15;
+    uint64 unkn16;
+    if(unkn16){
+        returnAdd = FTell();
+        FSeek(unkn16);
+        RString unknName2<read=readRString>;
+        FSeek(returnAdd);
+    };
+    uint64 unkn17;
+    uint64 unkn18;
+    if(unkn18){
+        returnAdd = FTell();
+        FSeek(unkn18);
+        RString unknName3<read=readRString>;
+        FSeek(returnAdd);
+    };
+    uint64 unkn19;
+    uint64 unkn20;
+    if(unkn20){
+        returnAdd = FTell();
+        FSeek(unkn20);
+        RString unknName4<read=readRString>;
+        FSeek(returnAdd);
+    };
+    uint64 unkn21;
+    uint64 unkn22;
+    if(unkn22){
+        returnAdd = FTell();
+        FSeek(unkn22);
+        RString unknName5<read=readRString>;
+        FSeek(returnAdd);
+    };
+    uint   bytecodeSizes[7];
+    uint   unkn27;
+    unknByteArray unknArray;
+}shdr;
+
+string readShdr(shdr &s){
+    return s.groupName;
+}
+
+typedef struct{
+    char SDF0[4];
+    short version;//definitely not a version, no actual clue what it is tho
+    short shdrCount;
+    uint64 mainBytecodeOff;
+    shdr shaderData[shdrCount*version]<optimize=false,read=readShdr>;
+}Header;
+
+Header header;
